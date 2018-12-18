@@ -1,0 +1,61 @@
+{% extends 'info/base.html' %}
+
+    {% block content %}
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">
+                        Timetable
+                    </h2>
+                </div>
+                <div id="no-more-tables">
+                     <div class="table-responsive">
+                        <table class="col-sm-12 table table-bordered table-striped table- cf " id="dataTable" width="100%" cellspacing="0">
+                            <thead class="cf">
+                                <tr>
+                                    <th>      </th>
+                                    <th>7:30 - 8:30</th>
+                                    <th>8:30 - 9:30</th>
+                                    <th>9:30 - 10:30</th>
+                                    <th>Break</th>
+                                    <th>11:00 - 11:50</th>
+                                    <th>11:50 - 12:40</th>
+                                    <th>12:40 - 1:30</th>
+                                    <th>Lunch</th>
+                                    <th>2:30 - 3:30</th>
+                                    <th>3:30 - 4:30</th>
+                                    <th>4:30 - 5:30</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in class_matrix %}
+                                <tr>
+                                    {% for j in i %}
+                                        {% if forloop.counter == 1 %}
+                                            <td><b>{{ j }}</b></td>
+                                        {% elif j == True %}
+                                            <td></td>
+                                        {% else %}
+    {#                                        <td><a href="{% url 'free_teachers' j.id %}" >{{ j.assign.class_id_id }} {{ j.assign.course.shortname }}</a> </td>#}
+                                            <td><a href="{% url 'free_teachers' j.id %}"
+                                                    onclick="window.open('{% url 'free_teachers' j.id %}',
+                                                                         'newwindow',
+                                                                         'width=600,height=400');
+                                                              return false;">{{ j.assign.class_id_id }} {{ j.assign.course.shortname }}</a>
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    {% endblock %}

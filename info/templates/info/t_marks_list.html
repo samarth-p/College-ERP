@@ -1,0 +1,42 @@
+{% extends 'info/base.html' %}
+
+{% block content %}
+    <div class="card mb-3">
+        <div class="card-header">
+              <i class="fas fa-table"></i>
+            <b>Attendance</b></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for m in m_list %}
+                    <tr>
+                        <td>{{ m.name }}</td>
+                        {% if not m.status %}
+                            <td class="p-3 mb-2 bg-danger text-white">Not Marked</td>
+                            <td>
+                                <a class="btn btn-primary" href="{% url 't_marks_entry' m.id %}" role="button">Enter Marks</a>
+                            </td>
+
+                        {% else %}
+                            <td class="p-3 mb-2 bg-success text-white">Marked</td>
+                            <td><a class="btn btn-warning" href="{% url 'edit_marks' m.id %}" role="button">Edit Marks</a> </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                            <p>student has no courses</p>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+        </div>
+    </div>
+{% endblock %}

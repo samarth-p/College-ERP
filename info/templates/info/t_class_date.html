@@ -1,0 +1,47 @@
+{% extends 'info/base.html' %}
+
+{% block content %}
+    <div class="card mb-3">
+        <div class="card-header">
+              <i class="fas fa-table"></i>
+            <b>Attendance</b></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for a in att_list %}
+                    <tr>
+                        <td>{{ a.date }}</td>
+                        {% if a.status == 0 %}
+                            <td class="p-3 mb-2 bg-danger text-white">Not Marked</td>
+                            <td>
+                                <a class="btn btn-primary" href="{% url 't_attendance' a.id %}" role="button">Enter Attendance</a>
+                                <a class="btn btn-warning" href="{% url 'cancel_class' a.id %}">Cancel Class</>
+                            </td>
+
+                        {% elif a.status == 1 %}
+                            <td class="p-3 mb-2 bg-success text-white">Marked</td>
+                            <td><a class="btn btn-secondary" href="{% url 'edit_att' a.id %}" role="button">Edit Attendance</a> </td>
+
+                        {% else %}
+                            <td class="p-3 mb-2 bg-warning text-white">Cancelled</td>
+                            <td><a class="btn btn-primary" href="{% url 't_attendance' a.id %}" role="button">Enter Attendance</a></td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                            <p>student has no courses</p>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+        </div>
+    </div>
+{% endblock %}

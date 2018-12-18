@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>homepage</title>
+      {% load static %}
+
+    <!-- Bootstrap core CSS -->
+      <link href="{% static '/info/homepage/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+      <link href="{% static '/info/homepage/css/heroic-features.css' %}" rel="stylesheet">
+          <link href="{% static '/info/bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">CollegeERP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link text-capitalize">{{ request.user.student.name }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Jumbotron Header -->
+      <header class="jumbotron my-4">
+        <h1 class="display-3 text-capitalize">Welcome {{ request.user.teacher.name }}</h1>
+{#        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>#}
+{#        <a href="#" class="btn btn-primary btn-lg">Call to action!</a>#}
+      </header>
+
+      <!-- Page Features -->
+      <div class="row text-center">
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+              <a href="{% url 't_clas' request.user.teacher.id 1 %}">
+                <img class="card-img-top" src="{% static 'info/images/attendance2.jpg' %}" alt="">
+              </a>
+              <div class="card-body">
+              <h4 class="card-title">Attendance</h4>
+              <p class="card-text">Enter the attendance of the students based on the class they are in. There is also
+                  the provision to edit the attendance of a whole class or student individually.</p>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" role="button" href="{% url 't_clas' request.user.teacher.id 1 %}"> Enter Attendance</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+              <a href="{% url 't_clas' request.user.teacher.id 2 %}">
+                <img class="card-img-top" src="{% static 'info/images/marks.jpg' %}" alt="">
+              </a>
+              <div class="card-body">
+              <h4 class="card-title">Marks</h4>
+              <p class="card-text">Enter the marks of the students based on the class they are in. This includes
+                    Internals, events and SEE. The marks of the students can also be edited.</p>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" role="button" href="{% url 't_clas' request.user.teacher.id 2 %}">Enter Marks</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+              <a href="{% url 't_timetable' request.user.teacher.id %}">
+                <img class="card-img-top" src="{% static 'info/images/timetable.png' %}" alt="">
+              </a>
+              <div class="card-body">
+              <h4 class="card-title">TimeTable</h4>
+              <p class="card-text">View the timetable in a tabular form. For a particular class, it specifies a
+                  list of teachers who handle the same class that are free for that time slot.</p>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" role="button" href="{% url 't_timetable' request.user.teacher.id %}">View TimeTable</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <a href="{% url 't_clas' request.user.teacher.id 3 %}">
+                <img class="card-img-top" src="{% static 'info/images/reports.png' %}" alt="">
+            </a>
+            <div class="card-body">
+              <h4 class="card-title">Reports</h4>
+              <p class="card-text">Generate reports for each class. These reports include generating a table consisting
+                    of the students belonging to that class and their respective CIE and Attendance.</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 't_clas' request.user.teacher.id 3 %}" class="btn btn-primary">Generate Reports</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="/accounts/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+
+
+      <script src="{% static '/info/homepage/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static '/info/homepage/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  </body>
+
+</html>

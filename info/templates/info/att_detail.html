@@ -1,0 +1,44 @@
+{% extends 'info/base.html' %}
+
+    {% block content %}
+        <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+            <strong>{{ cr.name }}</strong></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                        {% for a in att_list %}
+                        <tr class="row100 body">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ a.date }}</td>
+                            <td>{{ a.date|date:"l" }}</td>
+                            {% if a.status %}
+                            <td class="p-3 mb-2 bg-success text-white">Present <span class="glyphicon glyphicon-thumbs-up"></span></td>
+                            {% else %}
+                            <td class="p-3 mb-2 bg-danger text-white">Absent <span class="glyphicon glyphicon-thumbs-down"></span</td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                            <p>student has no attendance</p>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+    {% endblock %}
+

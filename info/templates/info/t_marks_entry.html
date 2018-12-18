@@ -1,0 +1,46 @@
+{% extends 'info/base.html' %}
+{% block content %}
+{% if c.student_set.all %}
+
+<form action="{% url 'marks_confirm' mc.id %}" method="post">
+            {% csrf_token %}
+    <div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-table"></i>
+         <b>{{ dept1.name }}</b></div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Total Marks</th>
+                    <th>Enter Marks</th>
+                </tr>
+              </thead>
+                <tbody>
+                {% for s in c.student_set.all %}
+                    <tr>
+                    <td>{{s.name}}</td>
+                    <td>{{ mc.total_marks }}</td>
+                    <td>
+                        <input type="number" name="{{ s.USN }}" min="0" max="{{ mc.total_marks }}" value="0">
+                    </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+    <input class="btn btn-success" type="submit" value="Submit">
+</form>
+
+
+{% else %}
+    <p>No students in Class</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load static %}
+
+<!-- Bootstrap core CSS-->
+<link href="{% static '/info/bootstrap/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom fonts for this template-->
+<link href="{% static '/info/bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <h2 class="text-center">List Of Free Teachers</h2>
+    <ul class="list-group">
+        {% for t in ft_list %}
+            <li class="list-group-item list-group-item-success">{{ t }}</li>
+        {% endfor %}
+    </ul>

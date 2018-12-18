@@ -1,0 +1,46 @@
+{% extends 'info/base.html' %}
+    {% load static %}
+
+    {% block content %}
+                  <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+            <b>Marks</b></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th style="width: 25%">Student USN</th>
+                        <th style="width: 25%">Student Name</th>
+                        <th style="width: 25%">Attendance</th>
+                        <th style="width: 25%">CIE</th>
+                  </thead>
+                  <tbody>
+                    {% for sc in sc_list %}
+                    <tr>
+                        <td>{{ sc.student_id }}</td>
+                        <td>{{ sc.student.name }}</td>
+                        {% if sc.get_attendance < 75 %}
+                            <td class="p-3 mb-2 bg-danger text-white">{{ sc.get_attendance }}</td>
+                        {% else %}
+                            <td class="p-3 mb-2 bg-success text-white">{{ sc.get_attendance }}</td>
+                        {% endif %}
+                        {% if sc.get_cie < 25 %}
+                            <td class="p-3 mb-2 bg-danger text-white">{{ sc.get_cie }}</td>
+                        {% else %}
+                            <td class="p-3 mb-2 bg-success text-white">{{ sc.get_cie }}</td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                            <p>student has no courses</p>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+    {% endblock %}

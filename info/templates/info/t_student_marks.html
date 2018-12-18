@@ -1,0 +1,46 @@
+{% extends 'info/base.html' %}
+    {% load static %}
+
+    {% block content %}
+                  <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-table"></i>
+            <b>Marks</b></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>Student USN</th>
+                        <th>Student Name</th>
+                        <th>Internals 1</th>
+                        <th>Internals 2</th>
+                        <th>Internals 3</th>
+                        <th>Event 1</th>
+                        <th>Event 2</th>
+                        <th>SEE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for sc in sc_list %}
+                    <tr>
+                        <td>{{ sc.student_id }}</td>
+                        <td><b>{{ sc.student.name }} </b></td>
+                        {% for m in sc.marks_set.all %}
+                            <td>{{ m.marks1 }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% empty %}
+                            <p>student has no courses</p>
+                    {% endfor %}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+    {% endblock %}
+
+
