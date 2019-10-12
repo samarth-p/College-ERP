@@ -48,36 +48,36 @@ The admin page is used to modify all tables such as Students, Teachers, Departme
 
 ### Teacher Page
 
-![alt text](https://imgur.com/pMAoEbG)
+![alt text](https://imgur.com/pMAoEbG.png)
 
-![alt text](https://imgur.com/ZiQ3RRA)
+![alt text](https://imgur.com/ZiQ3RRA.png)
 
-![alt text](https://imgur.com/i025CJW)
+![alt text](https://imgur.com/i025CJW.png)
 
-![alt text](https://imgur.com/HQlLYmC)
+![alt text](https://imgur.com/HQlLYmC.png)
 
-![alt text](https://imgur.com/j6RyBmU)
+![alt text](https://imgur.com/j6RyBmU.png)
 
-![alt text](https://imgur.com/xIKEMvQ)
+![alt text](https://imgur.com/xIKEMvQ.png)
 
-![alt text](https://imgur.com/4Rl7Fpv)
+![alt text](https://imgur.com/4Rl7Fpv.png)
 
 ### Student Page
 
-![alt text](https://imgur.com/isL9cjz)
+![alt text](https://imgur.com/isL9cjz.png)
 
-![alt text](https://imgur.com/5pzl7m3)
+![alt text](https://imgur.com/5pzl7m3.png)
 
-![alt text](https://imgur.com/7zWhHZx)
+![alt text](https://imgur.com/7zWhHZx.png)
 
-![alt text](https://imgur.com/fu7gxk8)
+![alt text](https://imgur.com/fu7gxk8.png)
 
-![alt text](https://imgur.com/NZqU268)
+![alt text](https://imgur.com/NZqU268.png)
 
 ### Admin Page
 
-![alt text](https://imgur.com/sDvDc9N)
+![alt text](https://imgur.com/sDvDc9N.png)
 
-![alt text](https://imgur.com/tMKWx6f)
+![alt text](https://imgur.com/tMKWx6f.png)
 
-![alt text](https://imgur.com/PvCsNeB)
+![alt text](https://imgur.com/PvCsNeB.png)
