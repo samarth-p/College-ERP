@@ -3,7 +3,7 @@ import math
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save, post_delete
-from datetime import timedelta, date
+from datetime import timedelta
 
 # Create your models here.
 sex_choice = (
@@ -139,6 +139,10 @@ class AttendanceClass(models.Model):
     date = models.DateField()
     status = models.IntegerField(default=0)
 
+    class Meta:
+        verbose_name = 'Attendance'
+        verbose_name_plural = 'Attendance'
+
 
 class Attendance(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -192,7 +196,7 @@ class AttendanceTotal(models.Model):
         cr = Course.objects.get(name=self.course)
         total_class = Attendance.objects.filter(course=cr, student=stud).count()
         att_class = Attendance.objects.filter(course=cr, student=stud, status='True').count()
-        cta = math.ceil((0.75*total_class - att_class)/0.25)
+        cta = math.ceil((0.75 * total_class - att_class) / 0.25)
         if cta < 0:
             return 0
         return cta
@@ -216,7 +220,7 @@ class StudentCourse(models.Model):
         m = []
         for mk in marks_list:
             m.append(mk.marks1)
-        cie = math.ceil(sum(m[:5])/2)
+        cie = math.ceil(sum(m[:5]) / 2)
         return cie
 
     def get_attendance(self):
@@ -254,12 +258,18 @@ class MarksClass(models.Model):
         return 20
 
 
+class AttendanceRange(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+
 # Triggers
 
 
 def daterange(start_date, end_date):
-    for n in range(int ((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
+
 
 days = {
     'Monday': 1,
@@ -273,12 +283,12 @@ days = {
 
 def create_attendance(sender, instance, **kwargs):
     if kwargs['created']:
-        start_date = date(2018, 8, 1)
-        end_date = date(2018, 11, 30)
+        start_date = AttendanceRange.objects.all()[:1].get().start_date
+        end_date = AttendanceRange.objects.all()[:1].get().end_date
         for single_date in daterange(start_date, end_date):
             if single_date.isoweekday() == days[instance.day]:
                 try:
-                    a = AttendanceClass.objects.get(date=single_date.strftime("%Y-%m-%d"), assign=instance.assign)
+                    AttendanceClass.objects.get(date=single_date.strftime("%Y-%m-%d"), assign=instance.assign)
                 except AttendanceClass.DoesNotExist:
                     a = AttendanceClass(date=single_date.strftime("%Y-%m-%d"), assign=instance.assign)
                     a.save()

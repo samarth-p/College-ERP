@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AttendanceTotal, time_slots, DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse, Marks, MarksClass
+from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AttendanceTotal, time_slots, \
+    DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse, Marks, MarksClass
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+
+
 # Create your views here.
 
 
@@ -37,19 +40,6 @@ def attendance_detail(request, stud_id, course_id):
     cr = get_object_or_404(Course, id=course_id)
     att_list = Attendance.objects.filter(course=cr, student=stud).order_by('date')
     return render(request, 'info/att_detail.html', {'att_list': att_list, 'cr': cr})
-
-
-# def student_search(request, class_id):
-#     field = request.POST['fields']
-#     search = request.POST['search']
-#     class1 = get_object_or_404(Class, id=class_id)
-#     if field == 'USN':
-#         student_list = class1.student_set.filter(USN__icontains=search)
-#     elif field == 'name':
-#         student_list = class1.student_set.filter(name__icontains=search)
-#     else:
-#         student_list = class1.student_set.filter(sex__iexact=search)
-#     return render(request, 'info/class1.html', {'class1': class1, 'student_list': student_list})
 
 
 # Teacher Views
@@ -189,7 +179,7 @@ def e_confirm(request, assign_id):
         a = Attendance(course=cr, student=s, status=status, date=date, attendanceclass=assc)
         a.save()
 
-    return HttpResponseRedirect(reverse('t_clas', args=(ass.teacher_id,1)))
+    return HttpResponseRedirect(reverse('t_clas', args=(ass.teacher_id, 1)))
 
 
 @login_required()
@@ -269,7 +259,7 @@ def free_teachers(request, asst_id):
 
 @login_required()
 def marks_list(request, stud_id):
-    stud = Student.objects.get(USN=stud_id,)
+    stud = Student.objects.get(USN=stud_id, )
     ass_list = Assign.objects.filter(class_id_id=stud.class_id)
     sc_list = []
     for ass in ass_list:
@@ -352,14 +342,3 @@ def student_marks(request, assign_id):
     ass = Assign.objects.get(id=assign_id)
     sc_list = StudentCourse.objects.filter(student__in=ass.class_id.student_set.all(), course=ass.course)
     return render(request, 'info/t_student_marks.html', {'sc_list': sc_list})
-
-
-
-
-
-
-
-
-
-
-

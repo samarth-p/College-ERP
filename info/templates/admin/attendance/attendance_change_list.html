@@ -1,0 +1,21 @@
+{% extends 'admin/change_list.html' %}
+{% block object-tools %}
+    <form id="reset-attd" action="{% url 'admin:reset_attd' %}" method="POST">
+        {% csrf_token %}
+        <label for="startdate" class="col-sm-2 col-form-label">Start Date: &nbsp;</label>
+        <input type="date" name="startdate" class="vTextField" required>
+        <br>
+        <label for="enddate" class="col-sm-2 col-form-label">End Date: &nbsp;&nbsp;&nbsp;</label>
+        <input type="date" name="enddate" class="vTextField" required>
+        <button class="button" type="submit">Reset Attendance</button>
+    </form>
+    <br>
+{#    <script>#}
+{#        let resetAttdForm = document.querySelector('#reset-attd');#}
+{#        resetAttdForm.querySelector('input[name="startdate"], input[name="enddate"]').addEventListener('change', function (e) {#}
+{#            let startDate = e.target.value#}
+{#            resetAttdForm.action = 'reset_attd/' + startDate + '/'#}
+{#        })#}
+{#    </script>#}
+    {{ block.super }}
+{% endblock object-tools %}
