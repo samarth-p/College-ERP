@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib import admin
 
 
 urlpatterns = [
@@ -34,3 +35,5 @@ urlpatterns = [
     path('teacher/<int:marks_c_id>/Edit_marks/', views.edit_marks, name='edit_marks'),
 
 ]
+admin.site.site_url= None
+admin.site.site_header = 'My Site'
