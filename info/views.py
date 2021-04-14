@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AttendanceTotal, time_slots, \
+from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, \
+    AttendanceTotal, time_slots, \
     DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse, Marks, MarksClass
 from django.urls import reverse
 from django.utils import timezone
@@ -119,14 +120,17 @@ def confirm(request, ass_c_id):
             status = 'False'
         if assc.status == 1:
             try:
-                a = Attendance.objects.get(course=cr, student=s, date=assc.date, attendanceclass=assc)
+                a = Attendance.objects.get(course=cr, student=s, date=assc.date,
+                                           attendanceclass=assc)
                 a.status = status
                 a.save()
             except Attendance.DoesNotExist:
-                a = Attendance(course=cr, student=s, status=status, date=assc.date, attendanceclass=assc)
+                a = Attendance(course=cr, student=s, status=status, date=assc.date,
+                               attendanceclass=assc)
                 a.save()
         else:
-            a = Attendance(course=cr, student=s, status=status, date=assc.date, attendanceclass=assc)
+            a = Attendance(course=cr, student=s, status=status, date=assc.date,
+                           attendanceclass=assc)
             a.save()
             assc.status = 1
             assc.save()
@@ -248,7 +252,8 @@ def free_teachers(request, asst_id):
     t_list = Teacher.objects.filter(assign__class_id__id=asst.assign.class_id_id)
     for t in t_list:
         at_list = AssignTime.objects.filter(assign__teacher=t)
-        if not any([True if at.period == asst.period and at.day == asst.day else False for at in at_list]):
+        if not any([True if at.period == asst.period and
+                    at.day == asst.day else False for at in at_list]):
             ft_list.append(t)
 
     return render(request, 'info/free_teachers.html', {'ft_list': ft_list})
@@ -340,5 +345,6 @@ def edit_marks(request, marks_c_id):
 @login_required()
 def student_marks(request, assign_id):
     ass = Assign.objects.get(id=assign_id)
-    sc_list = StudentCourse.objects.filter(student__in=ass.class_id.student_set.all(), course=ass.course)
+    sc_list = StudentCourse.objects.filter(student__in=ass.class_id.student_set.all(),
+                                           course=ass.course)
     return render(request, 'info/t_student_marks.html', {'sc_list': sc_list})

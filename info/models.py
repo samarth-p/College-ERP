@@ -231,7 +231,8 @@ class StudentCourse(models.Model):
 class Marks(models.Model):
     studentcourse = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, choices=test_name, default='Internal test 1')
-    marks1 = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    marks1 = models.IntegerField(default=0, validators=[MinValueValidator(0),
+                                                        MaxValueValidator(100)])
 
     class Meta:
         unique_together = (('studentcourse', 'name'),)

@@ -1,12 +1,10 @@
 from django.test import TestCase
-from info.models import Dept, Class, Course, User, Student, Teacher, Assign, AssignTime, AttendanceTotal, Attendance, StudentCourse, Marks, MarksClass
 from django.urls import reverse
 from django.test.client import Client
 
+from info.models import Dept, Class, Course, User, Student, Teacher, Assign, AssignTime, AttendanceTotal, Attendance, StudentCourse, Marks, MarksClass
 
 # Create your tests here.
-
-
 class InfoTest(TestCase):
 
     def create_user(self, username='testuser', password='project123'):
@@ -117,7 +115,8 @@ class InfoTest(TestCase):
         Assign.objects.create(class_id=s.class_id, course=self.create_course(), teacher=self.create_teacher())
         response = self.client.get(reverse('attendance', args=(s.USN,)))
         self.assertEqual(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['att_list'], ['<AttendanceTotal: AttendanceTotal object (1)>'])
+        self.assertQuerysetEqual(response.context['att_list'],
+                                 ['<AttendanceTotal: AttendanceTotal object (1)>'])
 
     def test_no_attendance__detail(self):
         s = self.create_student()
@@ -134,7 +133,8 @@ class InfoTest(TestCase):
         self.client.login(username='test_user', password='test_password')
         resp = self.client.get(reverse('attendance_detail', args=(s.USN, cr.id)))
         self.assertEqual(resp.status_code, 200)
-        self.assertQuerysetEqual(resp.context['att_list'], ['<Attendance: ' + s.name + ' : ' + cr.shortname + '>'])
+        self.assertQuerysetEqual(resp.context['att_list'],
+                                 ['<Attendance: ' + s.name + ' : ' + cr.shortname + '>'])
 
     #teacher
 
@@ -160,12 +160,3 @@ class InfoTest(TestCase):
     #     resp = self.client.get(reverse('t_clas', args=(t.id, 1)))
     #     self.assertEqual(resp.status_code, 200)
     #     self.assertContains(resp, "Enter Attendance")
-
-
-
-
-
-
-
-
-

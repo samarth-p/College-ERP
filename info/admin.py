@@ -5,7 +5,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.http import HttpResponseRedirect
 from django.urls import path
 
-from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AssignTime, AttendanceClass
+from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, 
+AssignTime, AttendanceClass
 from .models import StudentCourse, Marks, User, AttendanceRange
 
 # Register your models here.
@@ -63,7 +64,8 @@ class AssignTimeInline(admin.TabularInline):
 class AssignAdmin(admin.ModelAdmin):
     inlines = [AssignTimeInline]
     list_display = ('class_id', 'course', 'teacher')
-    search_fields = ('class_id__dept__name', 'class_id__id', 'course__name', 'teacher__name', 'course__shortname')
+    search_fields = ('class_id__dept__name', 'class_id__id', 'course__name',
+                     'teacher__name', 'course__shortname')
     ordering = ['class_id__dept__name', 'class_id__id', 'course__id']
     raw_id_fields = ['class_id', 'course', 'teacher']
 
@@ -76,7 +78,8 @@ class MarksInline(admin.TabularInline):
 class StudentCourseAdmin(admin.ModelAdmin):
     inlines = [MarksInline]
     list_display = ('student', 'course',)
-    search_fields = ('student__name', 'course__name', 'student__class_id__id', 'student__class_id__dept__name')
+    search_fields = ('student__name', 'course__name', 'student__class_id__id',
+                     'student__class_id__dept__name')
     ordering = ('student__class_id__dept__name', 'student__class_id__id', 'student__USN')
 
 
