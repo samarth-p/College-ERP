@@ -382,3 +382,42 @@ def add_teacher(request):
     context = {'all_dept': all_dept}
 
     return render(request, 'info/add_teacher.html', context)
+
+
+@login_required()
+def add_student(request):
+    # If the user is not admin, they will be redirected to home
+    if not request.user.is_superuser:
+        return redirect("/")
+
+    if request.method == 'POST':
+        # Retrieving all the form data that has been inputted
+        class_id = get_object_or_404(Class, id=request.POST['class'])
+        name = request.POST['full_name']
+        usn = request.POST['usn']
+        dob = request.POST['dob']
+        sex = request.POST['sex'] 
+
+        # Creating a User with student username and password format
+        # USERNAME: firstname + underscore + last 3 digits of USN
+        # PASSWORD: firstname + underscore + last 3 digits of USN + month and date of birth(MMDD)
+        user = User.objects.create_user(
+            username=name.split(" ")[0].lower() + '_' + request.POST['usn'][-3:],
+            password=name.split(" ")[0].lower() + '@' + request.POST['usn'][-3:] + dob.replace("-","")[4:]
+        )
+        user.save()
+
+        # Creating a new student instance with given data and saving it.
+        Student(
+            user=user,
+            USN=usn,
+            class_id=class_id,
+            name=name,
+            sex=sex,
+            DOB=dob
+        ).save()
+        return redirect('/')
+    
+    all_classes = Class.objects.order_by('-id')
+    context = {'all_classes': all_classes}
+    return render(request, 'info/add_student.html', context)
