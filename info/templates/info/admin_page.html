@@ -18,8 +18,6 @@
     <!-- Custom styles for this template -->
       <link href="{% static '/info/homepage/css/heroic-features.css' %}" rel="stylesheet">
 
-
-
   </head>
 
   <body>
@@ -64,6 +62,18 @@
           </div>
         </div>
 
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card">
+            <a class="px-2 py-3" href="{% url 'add_student' %}">
+                <img class="card-img-top" src="{% static 'info/images/student.png' %}" alt="">
+            </a>
+            <div class="card-body">
+                <h4 class="card-title">Add Student</h4>
+                <p class="card-text">Enter the details of a student to enroll a new student. 
+                    Fill the details carefully as they are important for academics.</p>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- /.row -->
 
