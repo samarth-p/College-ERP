@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AttendanceTotal, time_slots, \
     DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse, Marks, MarksClass
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
 
 # Create your views here.
 
@@ -16,7 +19,7 @@ def index(request):
         return render(request, 'info/t_homepage.html')
     if request.user.is_student:
         return render(request, 'info/homepage.html')
-    return render(request, 'info/logout.html')
+    return render(request, 'info/admin_page.html')
 
 
 @login_required()
@@ -346,7 +349,7 @@ def student_marks(request, assign_id):
 
 @login_required()
 def add_teacher(request):
-    if not request.user.is_admin:
+    if not request.user.is_superuser:
         return redirect("/")
 
     if request.method == 'POST':

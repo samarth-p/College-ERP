@@ -55,8 +55,7 @@ urlpatterns = [
     path('teacher/<int:marks_c_id>/Edit_marks/',
          views.edit_marks, name='edit_marks'),
     path('api/auth/', include('djoser.urls')),
-
-
+    path('add-teacher/', views.add_teacher, name='add_teacher'),
 ]
 admin.site.site_url = None
 admin.site.site_header = 'My Site'
