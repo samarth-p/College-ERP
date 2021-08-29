@@ -342,3 +342,40 @@ def student_marks(request, assign_id):
     ass = Assign.objects.get(id=assign_id)
     sc_list = StudentCourse.objects.filter(student__in=ass.class_id.student_set.all(), course=ass.course)
     return render(request, 'info/t_student_marks.html', {'sc_list': sc_list})
+
+
+@login_required()
+def add_teacher(request):
+    if not request.user.is_admin:
+        return redirect("/")
+
+    if request.method == 'POST':
+        dept = get_object_or_404(Dept, id=request.POST['dept'])
+        name = request.POST['full_name']
+        id = request.POST['id'].lower()
+        dob = request.POST['dob']
+        sex = request.POST['sex']
+        
+        # Creating a User with teacher username and password format
+        # USERNAME: firstname + department + unique ID
+        # PASSWORD: firstname + department + year of birth(YYYY)
+        user = User.objects.create_user(
+            username=name.split(" ")[0].lower() + request.POST['dept'] + id,
+            password=name.split(" ")[0].lower() + request.POST['dept'] + dob.replace("-","")[:4]
+        )
+        user.save()
+
+        Teacher(
+            user=user,
+            id=id,
+            dept=dept,
+            name=name,
+            sex=sex,
+            DOB=dob
+        ).save()
+        return redirect('/')
+    
+    all_dept = Dept.objects.order_by('-id')
+    context = {'all_dept': all_dept}
+
+    return render(request, 'info/add_teacher.html', context)
