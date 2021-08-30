@@ -362,11 +362,11 @@ def add_teacher(request):
         sex = request.POST['sex']
         
         # Creating a User with teacher username and password format
-        # USERNAME: firstname + department + unique ID
-        # PASSWORD: firstname + department + year of birth(YYYY)
+        # USERNAME: firstname + underscore + unique ID
+        # PASSWORD: firstname + underscore + year of birth(YYYY)
         user = User.objects.create_user(
-            username=name.split(" ")[0].lower() + request.POST['dept'] + id,
-            password=name.split(" ")[0].lower() + request.POST['dept'] + dob.replace("-","")[:4]
+            username=name.split(" ")[0].lower() + '_' + id,
+            password=name.split(" ")[0].lower() + '_' + dob.replace("-","")[:4]
         )
         user.save()
 
@@ -402,10 +402,10 @@ def add_student(request):
 
         # Creating a User with student username and password format
         # USERNAME: firstname + underscore + last 3 digits of USN
-        # PASSWORD: firstname + underscore + last 3 digits of USN + month and date of birth(MMDD)
+        # PASSWORD: firstname + underscore + year of birth(YYYY)
         user = User.objects.create_user(
             username=name.split(" ")[0].lower() + '_' + request.POST['usn'][-3:],
-            password=name.split(" ")[0].lower() + '@' + request.POST['usn'][-3:] + dob.replace("-","")[4:]
+            password=name.split(" ")[0].lower() + '_' + dob.replace("-","")[:4]
         )
         user.save()
 
