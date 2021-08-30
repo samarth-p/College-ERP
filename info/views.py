@@ -19,7 +19,9 @@ def index(request):
         return render(request, 'info/t_homepage.html')
     if request.user.is_student:
         return render(request, 'info/homepage.html')
-    return render(request, 'info/admin_page.html')
+    if request.user.is_superuser:
+        return render(request, 'info/admin_page.html')
+    return render(request, 'info/logout.html')
 
 
 @login_required()
