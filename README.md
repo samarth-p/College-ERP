@@ -1,6 +1,8 @@
 # College-ERP
 A college management system built using Django framework. It is designed for interactions between students and teachers. Features include attendance, marks and time table.
 
+```GOTO WINDOWS POWERSHELL```
+
 ## Installation
 
 Python and Django need to be installed
@@ -16,6 +18,7 @@ Go to the College-ERP folder and run
 ```bash
 python manage.py runserver
 ```
+
 
 Then go to the browser and enter the url **http://127.0.0.1:8000/**
 
