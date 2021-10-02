@@ -9,6 +9,17 @@ Python and Django need to be installed
 pip install django
 ```
 
+```If Any Django Versions Changes Use Virtual Environment Installation
+pip install pipenv
+```
+
+After Launch
+```
+pipenv shell
+```
+
+```Insted of using pip now use pipenv``
+
 ## Usage
 
 Go to the College-ERP folder and run
