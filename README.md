@@ -18,7 +18,7 @@ After Launch
 pipenv shell
 ```
 
-```Insted of using pip now use pipenv``
+```Insted of using pip now use pipenv```
 
 ## Usage
 
