@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
 from .models import Dept, Class, Student, Attendance, Course, Teacher, Assign, AttendanceTotal, time_slots, \
     DAYS_OF_WEEK, AssignTime, AttendanceClass, StudentCourse, Marks, MarksClass
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
+
+User = get_user_model()
 
 # Create your views here.
 
@@ -16,6 +19,8 @@ def index(request):
         return render(request, 'info/t_homepage.html')
     if request.user.is_student:
         return render(request, 'info/homepage.html')
+    if request.user.is_superuser:
+        return render(request, 'info/admin_page.html')
     return render(request, 'info/logout.html')
 
 
@@ -342,3 +347,79 @@ def student_marks(request, assign_id):
     ass = Assign.objects.get(id=assign_id)
     sc_list = StudentCourse.objects.filter(student__in=ass.class_id.student_set.all(), course=ass.course)
     return render(request, 'info/t_student_marks.html', {'sc_list': sc_list})
+
+
+@login_required()
+def add_teacher(request):
+    if not request.user.is_superuser:
+        return redirect("/")
+
+    if request.method == 'POST':
+        dept = get_object_or_404(Dept, id=request.POST['dept'])
+        name = request.POST['full_name']
+        id = request.POST['id'].lower()
+        dob = request.POST['dob']
+        sex = request.POST['sex']
+        
+        # Creating a User with teacher username and password format
+        # USERNAME: firstname + underscore + unique ID
+        # PASSWORD: firstname + underscore + year of birth(YYYY)
+        user = User.objects.create_user(
+            username=name.split(" ")[0].lower() + '_' + id,
+            password=name.split(" ")[0].lower() + '_' + dob.replace("-","")[:4]
+        )
+        user.save()
+
+        Teacher(
+            user=user,
+            id=id,
+            dept=dept,
+            name=name,
+            sex=sex,
+            DOB=dob
+        ).save()
+        return redirect('/')
+    
+    all_dept = Dept.objects.order_by('-id')
+    context = {'all_dept': all_dept}
+
+    return render(request, 'info/add_teacher.html', context)
+
+
+@login_required()
+def add_student(request):
+    # If the user is not admin, they will be redirected to home
+    if not request.user.is_superuser:
+        return redirect("/")
+
+    if request.method == 'POST':
+        # Retrieving all the form data that has been inputted
+        class_id = get_object_or_404(Class, id=request.POST['class'])
+        name = request.POST['full_name']
+        usn = request.POST['usn']
+        dob = request.POST['dob']
+        sex = request.POST['sex'] 
+
+        # Creating a User with student username and password format
+        # USERNAME: firstname + underscore + last 3 digits of USN
+        # PASSWORD: firstname + underscore + year of birth(YYYY)
+        user = User.objects.create_user(
+            username=name.split(" ")[0].lower() + '_' + request.POST['usn'][-3:],
+            password=name.split(" ")[0].lower() + '_' + dob.replace("-","")[:4]
+        )
+        user.save()
+
+        # Creating a new student instance with given data and saving it.
+        Student(
+            user=user,
+            USN=usn,
+            class_id=class_id,
+            name=name,
+            sex=sex,
+            DOB=dob
+        ).save()
+        return redirect('/')
+    
+    all_classes = Class.objects.order_by('-id')
+    context = {'all_classes': all_classes}
+    return render(request, 'info/add_student.html', context)
