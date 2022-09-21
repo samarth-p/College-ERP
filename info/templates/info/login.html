@@ -24,16 +24,16 @@
 
   </head>
 
-  <body class="bg-dark">
+  <body class="bg-dark" style="background-image: url(https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aGlnaCUyMHJlc29sdXRpb24lMjAlMjBhYnN0cmFjdCUyMGltYWdlc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=5000&q=60);max-height:50px; width: auto; background-repeat: no-repeat; background-size: cover;">
 
-    <div class="container">
+    <div class="container" >
       <div class="card card-login mx-auto mt-5">
-        <div class="card-header">Login</div>
+        <div class="card-header text-center" >Login</div>
         <div class="card-body">
             <form method="post">
               {% csrf_token %}
               {{ form.as_p }}
-              <button  class="btn btn-success" type="submit">Login</button>
+              <button  class="btn btn-success col-md-12 text-center" type="submit">Login</button>
             </form>
 
         </div>
