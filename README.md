@@ -4,9 +4,11 @@ A college management system built using Django framework. It is designed for int
 ## Installation
 
 Python and Django need to be installed
-
+Additional libraries should be imported as well
 ```bash
 pip install django
+pip install djangorestframework
+pip install djoser
 ```
 
 ## Usage
