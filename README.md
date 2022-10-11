@@ -29,12 +29,12 @@ The username is their name and password for everyone is 'project123'.
 
 
 The student added will be given the credentials :
-Username - Name
-Password - USN
+Username- Name  
+Password- USN 
 
 The teacher added will be given the credentials :
-Username - Name
-Password - Name
+Username- Name  
+Password- Name 
 
 Example usernames:  
 student- 'samarth'  
