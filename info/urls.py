@@ -1,6 +1,8 @@
 from django.urls import path, include
-from . import views
+import apis.views as api_view
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from . import views
 
 
 urlpatterns = [
@@ -57,6 +59,17 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls')),
     path('add-teacher/', views.add_teacher, name='add_teacher'),
     path('add-student/', views.add_student, name='add_student'),
+    #     path('accounts/', include('django.contrib.auth.urls')),
+
+    path('forgot-password/',views.forgot_password,name="forgot_password"),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
 ]
 admin.site.site_url = None
 admin.site.site_header = 'My Site'

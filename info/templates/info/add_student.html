@@ -19,26 +19,25 @@
       <link href="{% static '/info/homepage/css/heroic-features.css' %}" rel="stylesheet">
           <link href="{% static '/info/bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
-
-
+          <script src="https://kit.fontawesome.com/198ce549fd.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="background-color: black;">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">CollegeERP</a>
+        <a class="navbar-brand"  href="{% url 'index' %}" style="font-size: 30px;" ><i class="fa-sharp fa-solid fa-graduation-cap fa-2xl"></i> <span style="padding:2px 0px 2px 0px;">College ERP</span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <!-- <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                <button type="button" class="btn btn-outline-secondary btn-md"><a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal"></a></button>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </nav>
 
@@ -46,8 +45,8 @@
     <div class="container">
 
       <!-- Jumbotron Header -->
-      <header class="jumbotron my-4">
-        <h1 class="display-3 text-capitalize">Welcome {{ request.user }}</h1>
+      <header class="jumbotron my-4" style="background-color: rgba(0, 0, 0, 0.219);" >
+        <h1 class="text-center display-3 text-capitalize" style="font-family: 'Comic Neue', cursive; color: #060606;">Welcome {{ request.user }}</h1>
       </header>
 
       <!-- Page Features -->
@@ -101,9 +100,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                        <label class="col-lg-3 col-form-label form-control-label">Date of Birth</label>
+                        <label class="col-lg-3 col-form-label form-control-label">Email</label>
                             <div class="col-lg-9">
-                                <input class="form-control" name="dob" type="date" required>
+                                <input class="form-control" name="dob" type="email" required>
                             </div>
                         </div>
 
