@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework.authtoken',
     'apis',
+    'crispy_forms',
 
 ]
 
@@ -105,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    
 ]
 
 
@@ -138,3 +140,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'programmingraw@gmail.com'
+EMAIL_HOST_PASSWORD = 'acpypjsfkzlpbqfz'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
