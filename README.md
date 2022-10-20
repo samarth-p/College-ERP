@@ -4,9 +4,11 @@ A college management system built using Django framework. It is designed for int
 ## Installation
 
 Python and Django need to be installed
-
+Additional libraries should be imported as well
 ```bash
 pip install django
+pip install djangorestframework
+pip install djoser
 ```
 
 ## Usage
@@ -23,7 +25,24 @@ Then go to the browser and enter the url **http://127.0.0.1:8000/**
 ## Login
 
 The login page is common for students and teachers.  
-The username is their name and password for everyone is 'project123'.  
+The username is their name and password for everyone is 'project123'.
+
+
+The student added will be given the credentials :
+
+Username- Name  
+
+Password- USN 
+
+
+
+The teacher added will be given the credentials :
+
+Username- Name 
+
+Password- Name 
+
+
 
 Example usernames:  
 student- 'samarth'  

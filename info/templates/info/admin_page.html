@@ -18,21 +18,23 @@
     <!-- Custom styles for this template -->
       <link href="{% static '/info/homepage/css/heroic-features.css' %}" rel="stylesheet">
 
+      <script src="https://kit.fontawesome.com/198ce549fd.js" crossorigin="anonymous"></script>
+
   </head>
 
   <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="background-color: black;">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">CollegeERP</a>
+        <a class="navbar-brand"  href="{% url 'index' %}" style="font-size: 30px;" ><i class="fa-sharp fa-solid fa-graduation-cap fa-2xl"></i> <span style="padding:2px 0px 2px 0px;">College ERP</span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                <button type="button" class="btn btn-outline-secondary btn-md"><a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a></button>
             </li>
           </ul>
         </div>
@@ -43,12 +45,12 @@
     <div class="container">
 
       <!-- Jumbotron Header -->
-      <header class="jumbotron my-4">
-        <h1 class="display-3 text-capitalize">Welcome {{ request.user }}</h1>
+      <header class="jumbotron my-4" style="background-color: rgba(0, 0, 0, 0.219);" >
+        <h1 class="text-center display-3 text-capitalize" style="font-family: 'Comic Neue', cursive; color: #060606;">Welcome {{ request.user }}</h1>
       </header>
 
       <!-- Page Features -->
-      <div class="row text-center justify-content-center">
+      <div class="row text-center justify-content-center display-flex">
 
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card"> 
