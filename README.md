@@ -94,3 +94,19 @@ This will delete all present attendance data and create new attendance objects f
 ![alt text](https://imgur.com/tMKWx6f.png)
 
 ![alt text](https://imgur.com/PvCsNeB.png)
+
+//Secret key should ke kept secret in a file named ".env" file which is ignored by .gitignore//
+therefore install a package named "environ" via "pip install environ" command on CLI to read 
+the contents of .env file.
+In the same directory of settings.py create a file named ".env" and then put your secret key there
+and all the other sensitive passwords which an attacker might misuse such as creating own hashes for website using 
+secret key.
+Also DEBUG should be kept false during production
+
+
+CONTENTS OF .env file should look like:
+
+SECRET_KEY=xyz
+DEBUG=FALSE
+ 
+(remember not to use any space across equals-to("==") sign and also write everything without quotes)

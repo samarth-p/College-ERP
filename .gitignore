@@ -117,3 +117,18 @@ media/
 # **/migrations/**
 # !**/migrations
 # !**/migrations/__init__.py
+
+
+# ignoring .env files
+College-ERP/CollegeERP/.env
+#ignored my own virtual environment(you can comment this line)
+College-ERP/env
+
+#also it not a good practice to commit the migrations files and _pycache files to git therefore they are also ignored
+College-ERP/apis/__pycache__
+College-ERP/CollegeERP/__pycache__
+College-ERP/info/__pycache__
+College-ERP/info/migrations
+
+#if these are not ignored means they were commited before so run the command "git rm -r --cached ." to clear commit cache
+# then add the files and commit again also check for paths of these files in your local host
