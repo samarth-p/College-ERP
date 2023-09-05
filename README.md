@@ -19,6 +19,16 @@ python manage.py runserver
 
 Then go to the browser and enter the url **http://127.0.0.1:8000/**
 
+##Setup Using Docker
+
+Ensure you have docker and docker-compose installed on your device. 
+
+Once you have installed, run the below command in the project directory.
+
+    docker-compose build && docker-compose up -d
+    
+Then you can access the ERP at **http://localhost:8000/**
+
 
 ## Login
 

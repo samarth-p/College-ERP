@@ -1,0 +1,11 @@
+django-server:
+  container_name: college-erp
+  restart: always
+  build: .
+  ports:
+    - 8000:8000
+  expose:
+    - 8000
+  volumes:
+    - college_erp_media_data:/usr/src/app/media
+  command: sh '/usr/src/app/run_web.sh'
