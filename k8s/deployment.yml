@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: erp-app
+spec:
+  replicas: 10  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: erp-app
+  template:
+    metadata:
+      labels:
+        app: erp-app
+    spec:
+      containers:
+      - name: erp-app-container
+        image: neeraj46665/erp:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PYTHONDONTWRITEBYTECODE
+          value: "1"
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        # You can also add other environment variables as needed
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: erp-app-service
+spec:
+  selector:
+    app: erp-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000  # Target Django's port inside the container
+  type: LoadBalancer  # This exposes the service externally; for internal only, use 'ClusterIP'
