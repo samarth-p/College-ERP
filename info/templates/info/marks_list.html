@@ -1,44 +1,1165 @@
 {% extends 'info/base.html' %}
-    {% load static %}
+{% load static %}
 
-    {% block content %}
-                  <div class="card mb-3">
-            <div class="card-header">
-              <i class="fas fa-table"></i>
-            <b>Marks</b></div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                        <th>Course ID</th>
-                        <th>Course name</th>
-                        <th>Internals 1</th>
-                        <th>Internals 2</th>
-                        <th>Internals 3</th>
-                        <th>Event 1</th>
-                        <th>Event 2</th>
-                        <th>SEE</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for sc in sc_list %}
-                    <tr>
-                        <td>{{ sc.course_id }}</td>
-                        <td>{{sc.course.name}}</td>
-                        {% for m in sc.marks_set.all %}
-                            <td>{{ m.marks1 }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% empty %}
-                            <p>student has no courses</p>
-                    {% endfor %}
+{% block content %}
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">Academic Performance</h1>
+      <p class="dashboard-subtitle">Track your progress across all courses and assessments</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="courseSearch" class="search-input" placeholder="Search courses...">
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="card">
+          <i class="fas fa-th-large"></i>
+        </button>
+        <button class="view-btn" data-view="table">
+          <i class="fas fa-table"></i>
+        </button>
+      </div>
+    </div>
+  </div>
 
-                  </tbody>
-                </table>
+  <!-- Stats Overview -->
+  <div class="stats-overview">
+    <div class="stat-card animate-in" style="--delay: 0.1s">
+      <div class="stat-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value" id="avgScore">0</h3>
+        <p class="stat-label">Average Score</p>
+      </div>
+      <div class="stat-chart" id="avgScoreChart"></div>
+    </div>
+
+    <div class="stat-card animate-in" style="--delay: 0.2s">
+      <div class="stat-icon">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value" id="topScore">0</h3>
+        <p class="stat-label">Highest Score</p>
+      </div>
+      <div class="stat-chart" id="topScoreChart"></div>
+    </div>
+
+    <div class="stat-card animate-in" style="--delay: 0.3s">
+      <div class="stat-icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value" id="courseCount">0</h3>
+        <p class="stat-label">Total Courses</p>
+      </div>
+      <div class="stat-chart" id="courseCountChart"></div>
+    </div>
+
+    <div class="stat-card animate-in" style="--delay: 0.4s">
+      <div class="stat-icon">
+        <i class="fas fa-tasks"></i>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value" id="completionRate">0%</h3>
+        <p class="stat-label">Completion Rate</p>
+      </div>
+      <div class="stat-chart" id="completionRateChart"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="marks-container">
+    <!-- Card View (Default) -->
+    <div class="marks-card-view" id="cardView">
+      {% for sc in sc_list %}
+      <div class="course-card animate-in" style="--delay: {{ forloop.counter|add:4 }}0ms">
+        <div class="course-header">
+          <div class="course-info">
+            <h3 class="course-title">{{ sc.course.name }}</h3>
+            <span class="course-id">{{ sc.course_id }}</span>
+          </div>
+          <div class="course-actions">
+            <button class="action-btn" data-tooltip="View Details">
+              <i class="fas fa-expand-alt"></i>
+            </button>
+            <button class="action-btn" data-tooltip="Download Report">
+              <i class="fas fa-download"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="course-body">
+          <div class="performance-overview">
+            <div class="overall-score">
+              {% with marks=sc.marks_set.all.0 %}
+              {% with overall=marks.calculate_overall|default:0 %}
+              <div class="score-circle" data-score="{{ overall }}">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle" stroke-dasharray="{{ overall }}, 100" d="M18 2.0845
+                    a 15.9155 15.9155 0 0 1 0 31.831
+                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <text x="18" y="20.35" class="percentage">{{ overall }}%</text>
+                </svg>
               </div>
+              {% endwith %}
+              {% endwith %}
+              <div class="score-label">Overall Performance</div>
+            </div>
+
+            <div class="assessment-breakdown">
+              {% for m in sc.marks_set.all %}
+              <div class="assessment-item">
+                <div class="assessment-info">
+                  <span class="assessment-name">Internals 1</span>
+                  <span class="assessment-score">{{ m.marks1 }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: {% widthratio m.marks1 100 100 %}%"></div>
+                </div>
+              </div>
+
+              <div class="assessment-item">
+                <div class="assessment-info">
+                  <span class="assessment-name">Internals 2</span>
+                  <span class="assessment-score">{{ m.marks2 }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: {% widthratio m.marks2 100 100 %}%"></div>
+                </div>
+              </div>
+
+              <div class="assessment-item">
+                <div class="assessment-info">
+                  <span class="assessment-name">Internals 3</span>
+                  <span class="assessment-score">{{ m.marks3 }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: {% widthratio m.marks3 100 100 %}%"></div>
+                </div>
+              </div>
+
+              <div class="assessment-item">
+                <div class="assessment-info">
+                  <span class="assessment-name">Event 1</span>
+                  <span class="assessment-score">{{ m.event1 }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: {% widthratio m.event1 100 100 %}%"></div>
+                </div>
+              </div>
+
+              <div class="assessment-item">
+                <div class="assessment-info">
+                  <span class="assessment-name">Event 2</span>
+                  <span class="assessment-score">{{ m.event2 }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: {% widthratio m.event2 100 100 %}%"></div>
+                </div>
+              </div>
+
+              <div class="assessment-item">
+                <div class="assessment-info">
+                  <span class="assessment-name">SEE</span>
+                  <span class="assessment-score">{{ m.see }}</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress" style="width: {% widthratio m.see 100 100 %}%"></div>
+                </div>
+              </div>
+              {% endfor %}
             </div>
           </div>
+        </div>
 
 
-    {% endblock %}
+      </div>
+      {% empty %}
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <h3>No Courses Found</h3>
+        <p>You are not enrolled in any courses at the moment.</p>
+        <button class="btn-primary">Explore Available Courses</button>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Table View (Hidden by default) -->
+    <div class="marks-table-view" id="tableView" style="display: none;">
+      <div class="table-container animate-in">
+        <table class="marks-table" id="dataTable">
+          <thead>
+            <tr>
+              <th>Course ID</th>
+              <th>Course Name</th>
+              <th>Internals 1</th>
+              <th>Internals 2</th>
+              <th>Internals 3</th>
+              <th>Event 1</th>
+              <th>Event 2</th>
+              <th>SEE</th>
+              <th>Overall</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sc in sc_list %}
+            <tr class="table-row-animate" style="--delay: {{ forloop.counter|add:1 }}00ms">
+              <td>{{ sc.course_id }}</td>
+              <td>{{ sc.course.name }}</td>
+              {% for m in sc.marks_set.all %}
+                <td>
+                  <div class="score-pill" data-score="{{ m.marks1 }}">{{ m.marks1 }}</div>
+                </td>
+                <td>
+                  <div class="score-pill" data-score="{{ m.marks2 }}">{{ m.marks2 }}</div>
+                </td>
+                <td>
+                  <div class="score-pill" data-score="{{ m.marks3 }}">{{ m.marks3 }}</div>
+                </td>
+                <td>
+                  <div class="score-pill" data-score="{{ m.event1 }}">{{ m.event1 }}</div>
+                </td>
+                <td>
+                  <div class="score-pill" data-score="{{ m.event2 }}">{{ m.event2 }}</div>
+                </td>
+                <td>
+                  <div class="score-pill" data-score="{{ m.see }}">{{ m.see }}</div>
+                </td>
+                <td>
+                  <div class="overall-pill">{{ m.calculate_overall|default:0 }}%</div>
+                </td>
+              {% endfor %}
+              <td>
+                <div class="table-actions">
+                  <button class="table-action-btn" data-tooltip="View Details">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="table-action-btn" data-tooltip="Download Report">
+                    <i class="fas fa-download"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="10" class="empty-table-message">
+                <div class="empty-table-content">
+                  <i class="fas fa-book-open"></i>
+                  <p>No courses found</p>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --primary-dark: #4f46e5;
+    --secondary: #ec4899;
+    --secondary-light: #f472b6;
+    --secondary-dark: #db2777;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --info: #3b82f6;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gray: #64748b;
+    --gray-light: #cbd5e1;
+    --gray-dark: #475569;
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --border-radius: 0.5rem;
+    --border-radius-lg: 1rem;
+    --border-radius-full: 9999px;
+    --transition: all 0.3s ease;
+  }
+
+  /* Base Styles */
+  .dashboard-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* Header Styles */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+  }
+
+  .dashboard-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius-full);
+  }
+
+  .dashboard-subtitle {
+    color: var(--gray);
+    margin: 0.5rem 0 0;
+    font-size: 1rem;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .search-container {
+    position: relative;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+  }
+
+  .search-input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border-radius: var(--border-radius-full);
+    border: 1px solid var(--gray-light);
+    background-color: var(--light);
+    font-size: 0.875rem;
+    width: 250px;
+    transition: var(--transition);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    width: 300px;
+  }
+
+  .view-toggle {
+    display: flex;
+    background-color: var(--light);
+    border-radius: var(--border-radius-full);
+    padding: 0.25rem;
+    border: 1px solid var(--gray-light);
+  }
+
+  .view-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-full);
+    cursor: pointer;
+    color: var(--gray);
+    transition: var(--transition);
+  }
+
+  .view-btn.active {
+    background-color: var(--primary);
+    color: white;
+  }
+
+  .view-btn:hover:not(.active) {
+    background-color: var(--gray-light);
+    color: var(--dark);
+  }
+
+  /* Stats Overview */
+  .stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius);
+    background: var(--gradient-primary);
+    color: white;
+    font-size: 1.25rem;
+    margin-right: 1rem;
+  }
+
+  .stat-content {
+    flex: 1;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--dark);
+  }
+
+  .stat-label {
+    color: var(--gray);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .stat-chart {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100px;
+    height: 50px;
+    opacity: 0.2;
+  }
+
+  /* Card View */
+  .marks-card-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .course-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .course-header {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .course-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    color: var(--dark);
+  }
+
+  .course-id {
+    font-size: 0.875rem;
+    color: var(--gray);
+    display: block;
+  }
+
+  .course-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .action-btn:hover {
+    background-color: var(--gray-light);
+    color: var(--dark);
+  }
+
+  .action-btn[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .course-body {
+    padding: 1.5rem;
+    flex: 1;
+  }
+
+  .performance-overview {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .overall-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-circle {
+    width: 100px;
+    height: 100px;
+    position: relative;
+  }
+
+  .circular-chart {
+    width: 100%;
+    height: 100%;
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: var(--gray-light);
+    stroke-width: 3;
+  }
+
+  .circle {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+    stroke: url(#gradient);
+  }
+
+  .percentage {
+    fill: var(--dark);
+    font-size: 0.5rem;
+    text-anchor: middle;
+    font-weight: 600;
+  }
+
+  .score-label {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--gray);
+    text-align: center;
+  }
+
+  .assessment-breakdown {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .assessment-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .assessment-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .assessment-name {
+    font-size: 0.875rem;
+    color: var(--gray-dark);
+  }
+
+  .assessment-score {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .progress-bar {
+    height: 6px;
+    background-color: var(--gray-light);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+  }
+
+  .progress {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius-full);
+    transition: width 1s ease-in-out;
+  }
+
+  .course-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--gray-light);
+  }
+
+  .view-details-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--primary);
+    transition: var(--transition);
+  }
+
+  .view-details-btn:hover {
+    background-color: rgba(99, 102, 241, 0.1);
+  }
+
+  .view-details-btn i {
+    transition: transform 0.3s ease;
+  }
+
+  .view-details-btn:hover i {
+    transform: translateX(5px);
+  }
+
+  /* Table View */
+  .marks-table-view {
+    margin-top: 1rem;
+  }
+
+  .table-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .marks-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .marks-table th {
+    background-color: #f8fafc;
+    color: var(--gray-dark);
+    font-weight: 600;
+    text-align: left;
+    padding: 1rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--gray-light);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .marks-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 0.875rem;
+    color: var(--dark);
+  }
+
+  .marks-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .marks-table tr:hover {
+    background-color: rgba(99, 102, 241, 0.05);
+  }
+
+  .score-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-weight: 600;
+    font-size: 0.75rem;
+    background-color: #f1f5f9;
+    color: var(--dark);
+  }
+
+  .score-pill[data-score^="9"],
+  .score-pill[data-score="100"] {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #065f46;
+  }
+
+  .score-pill[data-score^="8"] {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #1e40af;
+  }
+
+  .score-pill[data-score^="7"] {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #92400e;
+  }
+
+  .score-pill[data-score^="6"],
+  .score-pill[data-score^="5"] {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #991b1b;
+  }
+
+  .overall-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-weight: 600;
+    font-size: 0.75rem;
+    background: var(--gradient-primary);
+    color: white;
+  }
+
+  .table-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .table-action-btn {
+    background: none;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .table-action-btn:hover {
+    background-color: var(--gray-light);
+    color: var(--dark);
+  }
+
+  .table-action-btn[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  /* Empty States */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    grid-column: 1 / -1;
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    color: var(--gray-light);
+    margin-bottom: 1rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    color: var(--dark);
+  }
+
+  .empty-state p {
+    color: var(--gray);
+    text-align: center;
+    margin: 0 0 1.5rem;
+  }
+
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-full);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .empty-table-message {
+    text-align: center;
+    padding: 3rem !important;
+  }
+
+  .empty-table-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .empty-table-content i {
+    font-size: 2rem;
+    color: var(--gray-light);
+  }
+
+  .empty-table-content p {
+    color: var(--gray);
+    margin: 0;
+  }
+
+  /* Animations */
+  @keyframes progress {
+    0% {
+      stroke-dasharray: 0 100;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-in {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .table-row-animate {
+    opacity: 0;
+    animation: fadeInUp 0.3s ease forwards;
+    animation-delay: var(--delay, 0s);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 1200px) {
+    .marks-card-view {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+
+  @media (max-width: 992px) {
+    .dashboard-container {
+      padding: 1.5rem;
+    }
+
+    .stats-overview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .performance-overview {
+      flex-direction: column;
+    }
+
+    .overall-score {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .header-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .search-input {
+      width: 200px;
+    }
+
+    .search-input:focus {
+      width: 200px;
+    }
+
+    .stats-overview {
+      grid-template-columns: 1fr;
+    }
+
+    .marks-card-view {
+      grid-template-columns: 1fr;
+    }
+
+    .marks-table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+</style>
+
+<!-- SVG Definitions -->
+<svg width="0" height="0" style="position: absolute;">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--primary)" />
+      <stop offset="100%" stop-color="var(--secondary)" />
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- Custom JavaScript -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize view toggle
+    const cardView = document.getElementById('cardView');
+    const tableView = document.getElementById('tableView');
+    const viewBtns = document.querySelectorAll('.view-btn');
+
+    viewBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        viewBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const view = this.getAttribute('data-view');
+        if (view === 'card') {
+          cardView.style.display = 'grid';
+          tableView.style.display = 'none';
+        } else {
+          cardView.style.display = 'none';
+          tableView.style.display = 'block';
+        }
+      });
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('courseSearch');
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const courseCards = document.querySelectorAll('.course-card');
+      const tableRows = document.querySelectorAll('.marks-table tbody tr:not(.empty-table-message)');
+
+      // Search in card view
+      courseCards.forEach(card => {
+        const courseTitle = card.querySelector('.course-title').textContent.toLowerCase();
+        const courseId = card.querySelector('.course-id').textContent.toLowerCase();
+
+        if (courseTitle.includes(searchTerm) || courseId.includes(searchTerm)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Search in table view
+      tableRows.forEach(row => {
+        const courseId = row.cells[0].textContent.toLowerCase();
+        const courseName = row.cells[1].textContent.toLowerCase();
+
+        if (courseName.includes(searchTerm) || courseId.includes(searchTerm)) {
+          row.style.display = 'table-row';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+
+    // Calculate and display stats
+    calculateStats();
+
+    // Initialize mini charts
+    initCharts();
+
+    // Color the score pills based on value
+    colorScorePills();
+  });
+
+  function calculateStats() {
+    // Get all marks
+    const marks1Elements = document.querySelectorAll('.assessment-score');
+    const marks = Array.from(marks1Elements).map(el => parseInt(el.textContent) || 0);
+
+    // Calculate average
+    const sum = marks.reduce((acc, curr) => acc + curr, 0);
+    const avg = marks.length > 0 ? Math.round(sum / marks.length) : 0;
+
+    // Find top score
+    const topScore = marks.length > 0 ? Math.max(...marks) : 0;
+
+    // Count courses
+    const courseCount = document.querySelectorAll('.course-card').length;
+
+    // Calculate completion rate (just for demo)
+    const completionRate = courseCount > 0 ? '100' : '0';
+
+    // Update stats
+    document.getElementById('avgScore').textContent = avg;
+    document.getElementById('topScore').textContent = topScore;
+    document.getElementById('courseCount').textContent = courseCount;
+    document.getElementById('completionRate').textContent = completionRate + '%';
+
+    // Animate the circular progress bars
+    document.querySelectorAll('.circle').forEach(circle => {
+      const scoreValue = circle.getAttribute('stroke-dasharray').split(',')[0];
+      circle.style.strokeDasharray = '0, 100';
+      setTimeout(() => {
+        circle.style.strokeDasharray = `${scoreValue}, 100`;
+      }, 100);
+    });
+  }
+
+  function initCharts() {
+    // This would normally use a charting library like Chart.js
+    // For this demo, we'll create simple SVG charts
+
+    // Average Score Chart
+    const avgScoreChart = document.getElementById('avgScoreChart');
+    if (avgScoreChart) {
+      avgScoreChart.innerHTML = createSparkline([40, 65, 75, 70, 85, 80]);
+    }
+
+    // Top Score Chart
+    const topScoreChart = document.getElementById('topScoreChart');
+    if (topScoreChart) {
+      topScoreChart.innerHTML = createSparkline([70, 80, 90, 85, 95, 100]);
+    }
+
+    // Course Count Chart
+    const courseCountChart = document.getElementById('courseCountChart');
+    if (courseCountChart) {
+      courseCountChart.innerHTML = createSparkline([1, 2, 3, 3, 4, 5]);
+    }
+
+    // Completion Rate Chart
+    const completionRateChart = document.getElementById('completionRateChart');
+    if (completionRateChart) {
+      completionRateChart.innerHTML = createSparkline([60, 70, 75, 80, 90, 100]);
+    }
+  }
+
+  function createSparkline(data) {
+    // Normalize data to fit in the SVG
+    const max = Math.max(...data);
+    const min = Math.min(...data);
+    const normalized = data.map(val => 50 - ((val - min) / (max - min) * 40));
+
+    // Create points string
+    let points = '';
+    const width = 100 / (data.length - 1);
+
+    for (let i = 0; i < data.length; i++) {
+      points += `${i * width},${normalized[i]} `;
+    }
+
+    return `
+      <svg width="100%" height="100%" viewBox="0 0 100 50" preserveAspectRatio="none">
+        <polyline
+          fill="none"
+          stroke="url(#gradient)"
+          stroke-width="2"
+          points="${points}"
+        />
+      </svg>
+    `;
+  }
+
+  function colorScorePills() {
+    document.querySelectorAll('.score-pill').forEach(pill => {
+      const score = parseInt(pill.getAttribute('data-score'));
+
+      if (score >= 90) {
+        pill.style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+        pill.style.color = '#065f46';
+      } else if (score >= 80) {
+        pill.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
+        pill.style.color = '#1e40af';
+      } else if (score >= 70) {
+        pill.style.backgroundColor = 'rgba(245, 158, 11, 0.2)';
+        pill.style.color = '#92400e';
+      } else if (score >= 50) {
+        pill.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+        pill.style.color = '#991b1b';
+      }
+    });
+  }
+</script>
+{% endblock %}
