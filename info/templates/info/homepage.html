@@ -1,142 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="College ERP System - Manage your academic life efficiently">
+  <meta name="author" content="">
+  <title>CollegeERP - Student Dashboard</title>
+  {% load static %}
 
-  <head>
+  <!-- Bootstrap core CSS -->
+  <link href="{% static '/info/homepage/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static '/info/bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <title>homepage</title>
-      {% load static %}
+  <!-- Custom styles -->
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --dark: #1f2937;
+      --light: #f9fafb;
+      --gray: #6b7280;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
 
-    <!-- Bootstrap core CSS -->
-      <link href="{% static '/info/homepage/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f3f4f6;
+      color: var(--dark);
+      padding-top: 76px;
+    }
 
+    /* Navbar Styling */
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    }
 
-    <!-- Custom styles for this template -->
-      <link href="{% static '/info/homepage/css/heroic-features.css' %}" rel="stylesheet">
-          <link href="{% static '/info/bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 0.5px;
+    }
 
+    .navbar-dark .navbar-nav .nav-link {
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+    }
 
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
 
-  </head>
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      border-radius: 15px;
+      padding: 3rem;
+      margin-bottom: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
 
-  <body>
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-          <a class="navbar-brand" href="{% url 'index' %}">CollegeERP</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link text-capitalize">{{ request.user.student.name }}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+    }
 
-    <!-- Page Content -->
+    .hero-section h1 {
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-section p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 700px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .welcome-message {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Cards */
+    .feature-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      background-color: white;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-card .card-img-top {
+      height: 180px;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+
+    .feature-card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+
+    .feature-card .card-body {
+      padding: 1.5rem;
+    }
+
+    .feature-card .card-title {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .feature-card .card-text {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .feature-card .card-footer {
+      background-color: transparent;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1.25rem 1.5rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Feature Icons */
+    .feature-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      background-color: rgba(67, 97, 238, 0.1);
+      color: var(--primary);
+    }
+
+    /* Modal */
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+
+    .btn-secondary {
+      background-color: #e5e7eb;
+      border-color: #e5e7eb;
+      color: var(--dark);
+      border-radius: 50px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: #d1d5db;
+      border-color: #d1d5db;
+      color: var(--dark);
+    }
+
+    /* Footer */
+    .footer {
+      background-color: white;
+      padding: 2rem 0;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .footer p {
+      margin-bottom: 0;
+      color: var(--gray);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+      .hero-section {
+        padding: 2rem;
+      }
+
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .feature-card {
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-section {
+        padding: 1.5rem;
+      }
+
+      .hero-section h1 {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-
-      <!-- Jumbotron Header -->
-      <header class="jumbotron my-4">
-        <h1 class="display-3 text-capitalize">Welcome {{ request.user.student.name }}</h1>
-{#        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>#}
-{#        <a href="#" class="btn btn-primary btn-lg">Call to action!</a>#}
-      </header>
-
-      <!-- Page Features -->
-      <div class="row text-center">
-
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-              <a href="{% url 'attendance' request.user.student.USN %}">
-                <img class="card-img-top" src="{% static 'info/images/attendance2.jpg' %}" alt="">
-              </a>
-              <div class="card-body">
-              <h4 class="card-title">Attendance</h4>
-              <p class="card-text">View the attendance status for each of your courses. The attendance of each course is
-                  also displayed as list of classes that were conducted.</p>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" role="button" href="{% url 'attendance' request.user.student.USN %}"> View Attendance</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-              <a href="{% url 'marks_list' request.user.student.USN %}">
-                <img class="card-img-top" src="{% static 'info/images/marks.jpg' %}" alt="">
-              </a>
-              <div class="card-body">
-              <h4 class="card-title">Marks</h4>
-              <p class="card-text">View the marks obtained for each of your courses. These include the marks of 3
-                  internal assessment, 2 events and the Semester End Exam  </p>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" role="button" href="{% url 'marks_list' request.user.student.USN %}">View Marks</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-              <a href="{% url 'timetable' request.user.student.class_id_id %}">
-                <img class="card-img-top" src="{% static 'info/images/timetable.png' %}" alt="">
-              </a>
-              <div class="card-body">
-              <h4 class="card-title">TimeTable</h4>
-              <p class="card-text">View the timetable in a tabular form. The timetable displays all the courses of the
-                  student and the time and day at which they are conducted.</p>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" role="button" href="{% url 'timetable' request.user.student.class_id_id %}">View TimeTable</a>
-            </div>
-          </div>
-        </div>
-
-
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <i class="fas fa-graduation-cap mr-2"></i> CollegeERP
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-capitalize">
+              <i class="fas fa-user-circle mr-1"></i> {{ request.user.student.name }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
+              <i class="fas fa-sign-out-alt mr-1"></i> Logout
+            </a>
+          </li>
+        </ul>
       </div>
-      <!-- /.row -->
-
     </div>
-    <!-- /.container -->
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <!-- Hero Section -->
+    <div class="hero-section animate-fade-in">
+      <div class="welcome-message">
+        <i class="fas fa-hand-wave mr-1"></i> Hello, Student!
+      </div>
+      <h1 class="text-capitalize">Welcome, {{ request.user.student.name }}</h1>
+      <p>Access all your academic information in one place. Track your attendance, view your marks, and check your class schedule with just a few clicks.</p>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4 animate-fade-in delay-1">
+        <div class="feature-card">
+          <a href="{% url 'attendance' request.user.student.USN %}">
+            <img class="card-img-top" src="{% static 'info/images/attendance2.jpg' %}" alt="Attendance tracking">
+          </a>
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <h4 class="card-title">Attendance Tracker</h4>
+            <p class="card-text">Monitor your attendance for each course in real-time. View detailed reports of all classes conducted and your attendance status.</p>
           </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="/accounts/logout">Logout</a>
+          <div class="card-footer">
+            <a class="btn btn-primary btn-block" role="button" href="{% url 'attendance' request.user.student.USN %}">
+              <i class="fas fa-chart-bar mr-1"></i> View Attendance
+            </a>
           </div>
         </div>
       </div>
+
+      <div class="col-lg-4 col-md-6 mb-4 animate-fade-in delay-2">
+        <div class="feature-card">
+          <a href="{% url 'marks_list' request.user.student.USN %}">
+            <img class="card-img-top" src="{% static 'info/images/marks.jpg' %}" alt="Academic marks">
+          </a>
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h4 class="card-title">Academic Performance</h4>
+            <p class="card-text">Access your marks for all assessments including internal tests, events, and semester end exams for each course.</p>
+          </div>
+          <div class="card-footer">
+            <a class="btn btn-primary btn-block" role="button" href="{% url 'marks_list' request.user.student.USN %}">
+              <i class="fas fa-chart-line mr-1"></i> View Marks
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6 mb-4 animate-fade-in delay-3">
+        <div class="feature-card">
+          <a href="{% url 'timetable' request.user.student.class_id_id %}">
+            <img class="card-img-top" src="{% static 'info/images/timetable.png' %}" alt="Class timetable">
+          </a>
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h4 class="card-title">Class Schedule</h4>
+            <p class="card-text">View your weekly timetable with all courses, timings, and classroom locations in an easy-to-read format.</p>
+          </div>
+          <div class="card-footer">
+            <a class="btn btn-primary btn-block" role="button" href="{% url 'timetable' request.user.student.class_id_id %}">
+              <i class="fas fa-calendar-alt mr-1"></i> View Timetable
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Bootstrap core JavaScript -->
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="/accounts/logout">
+            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static '/info/homepage/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static '/info/homepage/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-      <script src="{% static '/info/homepage/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static '/info/homepage/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- Custom JavaScript -->
+  <script>
+    // Add smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
 
-  </body>
-
+    // Add wave animation to hand icon
+    document.addEventListener('DOMContentLoaded', function() {
+      const handIcon = document.querySelector('.fa-hand-wave');
+      if (handIcon) {
+        setInterval(() => {
+          handIcon.style.transform = 'rotate(20deg)';
+          setTimeout(() => {
+            handIcon.style.transform = 'rotate(0deg)';
+          }, 500);
+        }, 2000);
+      }
+    });
+  </script>
+</body>
 </html>

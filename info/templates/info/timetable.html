@@ -1,51 +1,358 @@
 {% extends 'info/base.html' %}
 
-    {% block content %}
-    <div class="container">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2 class="text-center">
-                        Timetable
-                    </h2>
-                </div>
-                <div id="no-more-tables">
-                    <table class="col-sm-12 table table-bordered table-striped table-condensed cf">
-                        <thead class="cf">
-                            <tr>
-                                <th>      </th>
-                                <th>7:30 - 8:30</th>
-                                <th>8:30 - 9:30</th>
-                                <th>9:30 - 10:30</th>
-                                <th>Break</th>
-                                <th>11:00 - 11:50</th>
-                                <th>11:50 - 12:40</th>
-                                <th>12:40 - 1:30</th>
-                                <th>Lunch</th>
-                                <th>2:30 - 3:30</th>
-                                <th>3:30 - 4:30</th>
-                                <th>4:30 - 5:30</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for i in matrix %}
-                            <tr>
-                                {% for j in i %}
-                                    {% if forloop.counter == 1 %}
-                                    <td><b>{{ j }}</b></td>
-                                    {% else %}
-                                    <td>{{ j }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+{% block content %}
+<div class="timetable-container">
+  <div class="timetable-header">
+    <h1>Weekly Timetable</h1>
+    <p class="timetable-subtitle">Your class schedule for the current semester</p>
+  </div>
 
-
+  <div class="timetable-wrapper">
+    <div class="timetable-legend">
+      <div class="legend-item">
+        <span class="legend-color class-slot"></span>
+        <span>Class</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color break-slot"></span>
+        <span>Break</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-color lunch-slot"></span>
+        <span>Lunch</span>
+      </div>
     </div>
 
-    {% endblock %}
+    <div class="timetable-scroll">
+      <table class="timetable">
+        <thead>
+          <tr>
+            <th class="day-header"></th>
+            <th class="time-slot">7:30 - 8:30</th>
+            <th class="time-slot">8:30 - 9:30</th>
+            <th class="time-slot">9:30 - 10:30</th>
+            <th class="time-slot break-header">Break</th>
+            <th class="time-slot">11:00 - 11:50</th>
+            <th class="time-slot">11:50 - 12:40</th>
+            <th class="time-slot">12:40 - 1:30</th>
+            <th class="time-slot lunch-header">Lunch</th>
+            <th class="time-slot">2:30 - 3:30</th>
+            <th class="time-slot">3:30 - 4:30</th>
+            <th class="time-slot">4:30 - 5:30</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in matrix %}
+          <tr class="{% if forloop.counter0 == current_day %}current-day{% endif %}">
+            {% for j in i %}
+              {% if forloop.counter == 1 %}
+              <td class="day-name"><span>{{ j }}</span></td>
+              {% elif j == "Break" %}
+              <td class="break-slot"><span>{{ j }}</span></td>
+              {% elif j == "Lunch" %}
+              <td class="lunch-slot"><span>{{ j }}</span></td>
+              {% else %}
+              <td class="{% if j %}class-slot{% else %}empty-slot{% endif %}">
+                <span>{{ j }}</span>
+              </td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Timetable Styles */
+  .timetable-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .timetable-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .timetable-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #4361ee;
+    margin-bottom: 0.5rem;
+  }
+
+  .timetable-subtitle {
+    color: #6b7280;
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+
+  .timetable-wrapper {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    animation: slideUp 0.5s ease-in-out;
+  }
+
+  .timetable-legend {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+    background-color: #f9fafb;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #4b5563;
+  }
+
+  .legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+  }
+
+  .timetable-scroll {
+    overflow-x: auto;
+    padding: 1rem;
+  }
+
+  .timetable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 4px;
+  }
+
+  .timetable th, .timetable td {
+    padding: 0.75rem;
+    text-align: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .timetable th {
+    font-weight: 600;
+    color: #1f2937;
+    background-color: #f3f4f6;
+    position: sticky;
+    top: 0;
+  }
+
+  .day-header {
+    width: 100px;
+  }
+
+  .time-slot {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .day-name {
+    font-weight: 700;
+    color: #1f2937;
+    background-color: #f3f4f6;
+  }
+
+  .class-slot {
+    background-color: rgba(67, 97, 238, 0.1);
+    color: #4361ee;
+    font-weight: 500;
+  }
+
+  .class-slot:hover {
+    background-color: rgba(67, 97, 238, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.1);
+  }
+
+  .break-slot, .break-header {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    font-weight: 500;
+  }
+
+  .lunch-slot, .lunch-header {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    font-weight: 500;
+  }
+
+  .empty-slot {
+    background-color: #f9fafb;
+    color: #9ca3af;
+  }
+
+  .current-day td {
+    border: 2px solid rgba(67, 97, 238, 0.3);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .timetable-header h1 {
+      font-size: 2rem;
+    }
+
+    .time-slot {
+      min-width: 90px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .timetable-container {
+      margin: 1rem auto;
+    }
+
+    .timetable-header h1 {
+      font-size: 1.75rem;
+    }
+
+    .timetable-subtitle {
+      font-size: 1rem;
+    }
+
+    /* Mobile table styles */
+    .timetable, .timetable thead, .timetable tbody, .timetable th, .timetable td, .timetable tr {
+      display: block;
+    }
+
+    .timetable thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    .timetable tr {
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .timetable td {
+      position: relative;
+      padding-left: 50%;
+      text-align: left;
+      border-radius: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .timetable td:before {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      width: 45%;
+      transform: translateY(-50%);
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: 600;
+      content: attr(data-title);
+    }
+
+    .day-name {
+      text-align: center;
+      padding: 1rem;
+      background-color: #4361ee;
+      color: white;
+    }
+
+    .timetable td.day-name:before {
+      content: none;
+    }
+  }
+</style>
+
+<script>
+  // Add data-title attributes for mobile view
+  document.addEventListener('DOMContentLoaded', function() {
+    const timeSlots = Array.from(document.querySelectorAll('.timetable thead th')).map(th => th.textContent);
+
+    document.querySelectorAll('.timetable tbody tr').forEach(row => {
+      const cells = row.querySelectorAll('td');
+      cells.forEach((cell, index) => {
+        if (index > 0) { // Skip the day name cell
+          cell.setAttribute('data-title', timeSlots[index]);
+        }
+      });
+    });
+
+    // Highlight current time slot if applicable
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    const currentTime = currentHour + (currentMinute / 60);
+
+    // Map time ranges to their column indices
+    const timeRanges = [
+      { start: 7.5, end: 8.5, col: 1 },
+      { start: 8.5, end: 9.5, col: 2 },
+      { start: 9.5, end: 10.5, col: 3 },
+      // Break
+      { start: 11, end: 11.83, col: 5 },
+      { start: 11.83, end: 12.67, col: 6 },
+      { start: 12.67, end: 13.5, col: 7 },
+      // Lunch
+      { start: 14.5, end: 15.5, col: 9 },
+      { start: 15.5, end: 16.5, col: 10 },
+      { start: 16.5, end: 17.5, col: 11 }
+    ];
+
+    const currentDay = now.getDay(); // 0 is Sunday, 1 is Monday, etc.
+    const adjustedDay = currentDay === 0 ? 6 : currentDay - 1; // Adjust if your week starts with Monday
+
+    if (adjustedDay >= 0 && adjustedDay < 7) { // Only highlight if it's a weekday
+      const currentTimeSlot = timeRanges.find(range => currentTime >= range.start && currentTime < range.end);
+
+      if (currentTimeSlot) {
+        const rows = document.querySelectorAll('.timetable tbody tr');
+        if (rows[adjustedDay]) {
+          const cells = rows[adjustedDay].querySelectorAll('td');
+          if (cells[currentTimeSlot.col]) {
+            cells[currentTimeSlot.col].classList.add('current-time-slot');
+            cells[currentTimeSlot.col].style.boxShadow = '0 0 0 2px #4361ee inset';
+            cells[currentTimeSlot.col].style.animation = 'pulse 2s infinite';
+          }
+        }
+      }
+    }
+  });
+
+  // Add pulse animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.7) inset; }
+      70% { box-shadow: 0 0 0 4px rgba(67, 97, 238, 0) inset; }
+      100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0) inset; }
+    }
+
+    .current-time-slot {
+      position: relative;
+      z-index: 1;
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+{% endblock %}
