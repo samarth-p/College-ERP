@@ -128,6 +128,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
+
+# Restrict authentication to the fixed credentials backend
+AUTHENTICATION_BACKENDS = [
+    'info.backends.AparnaOnlyBackend',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (

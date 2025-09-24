@@ -21,7 +21,8 @@ def index(request):
         return render(request, 'info/homepage.html')
     if request.user.is_superuser:
         return render(request, 'info/admin_page.html')
-    return render(request, 'info/logout.html')
+    # Default dashboard for generic authenticated users
+    return render(request, 'info/simple_home.html')
 
 
 @login_required()

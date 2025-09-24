@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    {% load static %}
+    <link href="{% static '/info/bootstrap/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static '/info/bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static '/info/bootstrap/css/sb-admin.css' %}" rel="stylesheet">
+    <style>
+      body { padding-top: 40px; }
+    </style>
+    </head>
+<body class="bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow">
+          <div class="card-header">Welcome</div>
+          <div class="card-body">
+            <p class="lead mb-1">You are logged in as <strong>{{ request.user.username }}</strong>.</p>
+            <p class="text-muted mb-4">This is your main dashboard.</p>
+            <a class="btn btn-primary" href="{% url 'index' %}">Home</a>
+            <a class="btn btn-outline-secondary ml-2" href="/accounts/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static '/info/bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static '/info/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static '/info/bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+</body>
+</html>
+
