@@ -4,3 +4,4 @@ djangorestframework
 djoser
 pytz
 sqlparse
+tzdata
