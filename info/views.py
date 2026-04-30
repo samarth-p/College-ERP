@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login, logout
 
 
 User = get_user_model()
@@ -423,3 +424,4 @@ def add_student(request):
     all_classes = Class.objects.order_by('-id')
     context = {'all_classes': all_classes}
     return render(request, 'info/add_student.html', context)
+

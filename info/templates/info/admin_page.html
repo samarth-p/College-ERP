@@ -1,3 +1,6 @@
+
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,11 +12,9 @@
     <meta name="author" content="">
 
     <title>homepage</title>
-      {% load static %}
-
+      
     <!-- Bootstrap core CSS -->
       <link href="{% static '/info/homepage/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
 
     <!-- Custom styles for this template -->
       <link href="{% static '/info/homepage/css/heroic-features.css' %}" rel="stylesheet">
@@ -92,7 +93,10 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="/accounts/logout">Logout</a>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button class="btn btn-primary" type="submit">Logout</button>
+            </form>
           </div>
         </div>
       </div>

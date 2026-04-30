@@ -16,7 +16,7 @@ from rest_framework import status
 from django.db.models import Sum, Count
 from django.conf import settings
 import apis.serializers as api_ser
-
+from django.shortcuts import redirect
 
 class DetailView(APIView):
     """
@@ -136,3 +136,4 @@ class TimetableView(APIView):
                 return Response({'message': 'User not authenticated'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
