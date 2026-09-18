@@ -1,0 +1,28 @@
+<form method="post" action="{% url 'add_class' %}">
+    {% csrf_token %}
+    <div>
+        <label for="id">Class ID</label>
+        <input type="text" name="id" id="id" required />
+    </div>
+    <div>
+        <label for="dept">Department</label>
+        <select name="dept" id="dept">
+            {% for d in all_dept %}
+                <option value="{{ d.id }}">{{ d.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="section">Section</label>
+        <input type="text" name="section" id="section" required />
+    </div>
+    <div>
+        <label for="sem">Semester</label>
+        <input type="text" name="sem" id="sem" required />
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+        <a href="{% url 'index' %}">Cancel</a>
+    </div>
+</form>

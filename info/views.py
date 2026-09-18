@@ -423,3 +423,40 @@ def add_student(request):
     all_classes = Class.objects.order_by('-id')
     context = {'all_classes': all_classes}
     return render(request, 'info/add_student.html', context)
+
+# New minimal creation views: Dept and Class
+@login_required()
+def add_dept(request):
+    # Only superusers are allowed to add departments via this page
+    if not request.user.is_superuser:
+        return redirect("/")
+
+    if request.method == 'POST':
+        dept_id = request.POST.get('id')
+        name = request.POST.get('name')
+        # Create and save a minimal Dept instance with only the required fields
+        Dept(id=dept_id, name=name).save()
+        return redirect('/')
+
+    # GET -> render minimal form
+    return render(request, 'info/add_dept.html')
+
+
+@login_required()
+def add_class(request):
+    # Only superusers are allowed to add classes via this page
+    if not request.user.is_superuser:
+        return redirect("/")
+
+    if request.method == 'POST':
+        dept = get_object_or_404(Dept, id=request.POST.get('dept'))
+        class_id = request.POST.get('id')
+        section = request.POST.get('section')
+        sem = request.POST.get('sem')
+        # Create and save a minimal Class instance with only the required fields
+        Class(id=class_id, dept=dept, section=section, sem=sem).save()
+        return redirect('/')
+
+    all_dept = Dept.objects.order_by('-id')
+    context = {'all_dept': all_dept}
+    return render(request, 'info/add_class.html', context)

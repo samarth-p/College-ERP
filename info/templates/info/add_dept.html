@@ -1,0 +1,16 @@
+<form method="post" action="{% url 'add_dept' %}">
+    {% csrf_token %}
+    <div>
+        <label for="id">Department ID</label>
+        <input type="text" name="id" id="id" required />
+    </div>
+    <div>
+        <label for="name">Department Name</label>
+        <input type="text" name="name" id="name" required />
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+        <a href="{% url 'index' %}">Cancel</a>
+    </div>
+</form>

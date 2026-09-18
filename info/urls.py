@@ -33,8 +33,7 @@ urlpatterns = [
          views.t_attendance_detail, name='t_attendance_detail'),
     path('teacher/<int:att_id>/change_attendance/',
          views.change_att, name='change_att'),
-    path('teacher/<int:assign_id>/Extra_class/',
-         views.t_extra_class, name='t_extra_class'),
+    path('teacher/<int:assign_id>/Extra_class/', views.t_extra_class, name='t_extra_class'),
     path('teacher/<slug:assign_id>/Extra_class/confirm/',
          views.e_confirm, name='e_confirm'),
     path('teacher/<int:assign_id>/Report/', views.t_report, name='t_report'),
@@ -55,6 +54,11 @@ urlpatterns = [
     path('teacher/<int:marks_c_id>/Edit_marks/',
          views.edit_marks, name='edit_marks'),
     path('api/auth/', include('djoser.urls')),
+
+    # Minimal creation pages (superuser only)
+    path('add-dept/', views.add_dept, name='add_dept'),
+    path('add-class/', views.add_class, name='add_class'),
+
     path('add-teacher/', views.add_teacher, name='add_teacher'),
     path('add-student/', views.add_student, name='add_student'),
 ]
