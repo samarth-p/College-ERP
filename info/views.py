@@ -10,6 +10,11 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
+def _is_foreign_student(request, stud_id):
+    # Students may only access their own records; staff and superusers are unrestricted.
+    return request.user.is_student and str(request.user.student.USN) != str(stud_id)
+
 # Create your views here.
 
 
@@ -26,6 +31,8 @@ def index(request):
 
 @login_required()
 def attendance(request, stud_id):
+    if _is_foreign_student(request, stud_id):
+        return redirect('/')
     stud = Student.objects.get(USN=stud_id)
     ass_list = Assign.objects.filter(class_id_id=stud.class_id)
     att_list = []
@@ -41,6 +48,8 @@ def attendance(request, stud_id):
 
 @login_required()
 def attendance_detail(request, stud_id, course_id):
+    if _is_foreign_student(request, stud_id):
+        return redirect('/')
     stud = get_object_or_404(Student, USN=stud_id)
     cr = get_object_or_404(Course, id=course_id)
     att_list = Attendance.objects.filter(course=cr, student=stud).order_by('date')
@@ -264,6 +273,8 @@ def free_teachers(request, asst_id):
 
 @login_required()
 def marks_list(request, stud_id):
+    if _is_foreign_student(request, stud_id):
+        return redirect('/')
     stud = Student.objects.get(USN=stud_id, )
     ass_list = Assign.objects.filter(class_id_id=stud.class_id)
     sc_list = []
